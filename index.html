@@ -233,7 +233,7 @@
     <p class="wro-main-title">WORLD ROBOT OLYMPIAD 2026</p>
     <div id="current-level">LOADING</div>
     <div class="remark-bar">
-      <span class="remark-item">⭐ Team Rookie</span>
+      <span class="remark-item">⭐ Team Rookie ll Medal Certificate </span>
       <span class="remark-item">🥇 Gold</span>
       <span class="remark-item">🥈 Silver</span>
       <span class="remark-item">🥉 Bronze</span>
@@ -411,7 +411,7 @@
           targetTable.classList.add('visible');
         }
         // เมื่อวาร์ปมาอยู่ด้านล่างสุดเรียบร้อยแล้ว ให้จอดนิ่งค้างไว้ก่อน 15 วินาที แล้วค่อย ๆ เริ่มสกรอลล์ขึ้นไปด้านบน
-        loopTimeline.scrollTimeout = setTimeout(executeScrollUp, 15000);
+        loopTimeline.scrollTimeout = setTimeout(executeScrollUp, 10000);
       }, 100);
     });
   }
@@ -428,7 +428,7 @@
       } else {
         clearInterval(loopTimeline.scrollInterval);
         // เมื่อวิ่งขึ้นมาถึงด้านบนสุด (โชว์อันดับ 1-10 และเหรียญรางวัล) ค้างหน้าจอไว้ 15 วินาทีให้ทุกคนได้ชื่นชม แล้วค่อยเปลี่ยนหน้า
-        loopTimeline.pageSwitchTimeout = setTimeout(moveToNextPage, 15000);
+        loopTimeline.pageSwitchTimeout = setTimeout(moveToNextPage, 10000);
       }
     }, speedMs);
   }
