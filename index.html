@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WRO Leaderboard 2026</title>
-  
+ 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -16,20 +16,20 @@
       --wro-gradient-top: #0c1020;
       --wro-card: rgba(22, 38, 70, 0.65);
       --wro-text-light: #f1f5f9;
-      --wro-culture-blue: #26c6da; 
+      --wro-culture-blue: #26c6da;
       --gold: #ffd700;
       
-      --color-elementary: #2e7d32; 
-      --color-junior: #d32f2f;     
-      --color-senior: #1565c0;     
+      --color-elementary: #2e7d32;
+      --color-junior: #d32f2f;    
+      --color-senior: #1565c0;    
       
-      --theme-active: #d32f2f; 
+      --theme-active: #d32f2f;
 
       /* สีพื้นหลังแถวตารางแยกตามโควตารอบสอง */
       --bg-finalist-top3: rgba(212, 175, 55, 0.22);  
       --border-finalist-top3: rgba(212, 175, 55, 0.5);
       
-      --bg-finalist-top10: rgba(148, 163, 184, 0.18); 
+      --bg-finalist-top10: rgba(148, 163, 184, 0.18);
       --border-finalist-top10: rgba(148, 163, 184, 0.35);
     }
 
@@ -96,12 +96,12 @@
       border-collapse: separate;
       border-spacing: 0 12px;
       font-size: 26px;
-      opacity: 0; 
+      opacity: 0;
       transition: opacity 0.3s ease-in-out;
     }
     
     .wro-table.visible {
-      opacity: 1; 
+      opacity: 1;
     }
 
     .wro-table thead th {
@@ -225,19 +225,181 @@
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
     ::-webkit-scrollbar-thumb { background: var(--theme-active); border-radius: 3px; }
+
+    /* ====================================================
+       [NEW STYLES] Settings floating button and UI Panel
+       ==================================================== */
+    .settings-btn {
+      position: fixed;
+      top: 20px;
+      right: 30px;
+      z-index: 1050;
+      background: rgba(22, 38, 70, 0.85);
+      border: 1px solid rgba(38, 198, 218, 0.3);
+      color: var(--wro-text-light);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      transition: all 0.3s ease;
+    }
+    .settings-btn:hover {
+      transform: rotate(45deg) scale(1.08);
+      border-color: var(--wro-culture-blue);
+      color: var(--wro-culture-blue);
+      box-shadow: 0 0 15px rgba(38, 198, 218, 0.3);
+    }
+    .settings-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(4, 6, 12, 0.75);
+      backdrop-filter: blur(6px);
+      z-index: 1060;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .settings-overlay.show {
+      display: flex;
+      opacity: 1;
+    }
+    .settings-modal {
+      background: #090e1a;
+      border: 2px solid rgba(38, 198, 218, 0.4);
+      border-radius: 16px;
+      padding: 30px;
+      width: 90%;
+      max-width: 520px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+      color: var(--wro-text-light);
+      position: relative;
+    }
+    .settings-modal h4 {
+      color: var(--wro-culture-blue);
+      font-weight: 600;
+      margin-bottom: 22px;
+      border-bottom: 1px solid rgba(38, 198, 218, 0.2);
+      padding-bottom: 12px;
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .setting-group {
+      margin-bottom: 22px;
+    }
+    .setting-group label {
+      font-size: 15px;
+      color: #94a3b8;
+      margin-bottom: 8px;
+      display: block;
+      font-weight: 500;
+    }
+    .setting-group label span {
+      color: var(--wro-culture-blue);
+      font-weight: 600;
+    }
+    .form-range::-webkit-slider-thumb {
+      background: var(--wro-culture-blue);
+    }
+    .form-check-input {
+      background-color: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    .form-check-input:checked {
+      background-color: var(--wro-culture-blue);
+      border-color: var(--wro-culture-blue);
+    }
+    .close-settings-btn {
+      background: linear-gradient(135deg, #26c6da 0%, #0097a7 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 24px;
+      font-weight: 600;
+      width: 100%;
+      margin-top: 10px;
+      transition: all 0.2s ease;
+    }
+    .close-settings-btn:hover {
+      filter: brightness(1.1);
+      box-shadow: 0 0 15px rgba(38, 198, 218, 0.4);
+    }
   </style>
 </head>
 <body>
+
+  <!-- Floating Settings Button -->
+  <div id="settings-trigger" class="settings-btn" onclick="openSettingsModal()">
+    <i class="fas fa-cog fa-lg"></i>
+  </div>
+
+  <!-- Settings Dialog Overlay -->
+  <div id="settings-overlay" class="settings-overlay" onclick="closeSettingsModalOutside(event)">
+    <div class="settings-modal" onclick="event.stopPropagation()">
+      <h4><i class="fas fa-sliders-h"></i> ตั้งค่าระบอบคุมบอร์ด (Control Panel)</h4>
+      
+      <!-- Toggle Levels -->
+      <div class="setting-group">
+        <label>เปิด-ปิด การหมุนเวียนหน้าแสดงระดับชั้น</label>
+        <div class="d-flex flex-column gap-2 mt-2">
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="toggle-elementary" onchange="updateLevelToggle('Elementary', this.checked)">
+            <label class="form-check-label text-white" for="toggle-elementary">🔴 แสดง Elementary (ประถม)</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="toggle-junior" onchange="updateLevelToggle('Junior', this.checked)">
+            <label class="form-check-label text-white" for="toggle-junior">🔴 แสดง Junior (ม.ต้น)</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="toggle-senior" onchange="updateLevelToggle('Senior', this.checked)">
+            <label class="form-check-label text-white" for="toggle-senior">🔴 แสดง Senior (ม.ปลาย)</label>
+          </div>
+        </div>
+      </div>
+
+      <hr style="border-color: rgba(255, 255, 255, 0.1);">
+
+      <!-- Scroll Speed Slider -->
+      <div class="setting-group">
+        <label>ความเร็วในการ Auto-Scroll ขึ้น: <span id="val-speed">35</span> ms</label>
+        <input type="range" class="form-range" id="input-speed" min="10" max="120" step="5" oninput="updateScrollSpeed(this.value)">
+        <div class="d-flex justify-content-between text-muted" style="font-size: 11px;">
+          <span>เร็วมาก (10ms)</span>
+          <span>ปกติ (35ms)</span>
+          <span>ช้ามาก (120ms)</span>
+        </div>
+      </div>
+
+      <!-- Hold Delays -->
+      <div class="setting-group">
+        <label>หน่วงเวลารอที่ด้านล่างสุด: <span id="val-delay-bottom">15</span> วินาที</label>
+        <input type="range" class="form-range" id="input-delay-bottom" min="2" max="60" step="1" oninput="updateDelay('bottom', this.value)">
+      </div>
+
+      <div class="setting-group">
+        <label>หน่วงเวลารอด้านบนสุดก่อนสลับหน้า: <span id="val-delay-top">15</span> วินาที</label>
+        <input type="range" class="form-range" id="input-delay-top" min="2" max="60" step="1" oninput="updateDelay('top', this.value)">
+      </div>
+
+      <button class="close-settings-btn" onclick="closeSettingsModal()">ตกลง (บันทึกข้อมูล)</button>
+    </div>
+  </div>
 
   <div id="fixed-header">
     <p class="wro-main-title">WORLD ROBOT OLYMPIAD 2026</p>
     <div id="current-level">LOADING</div>
     <div class="remark-bar">
-      <span class="remark-item">Medal Certificate </span>
+      <span class="remark-item">⭐ Team Rookie</span>
       <span class="remark-item">🥇 Gold</span>
       <span class="remark-item">🥈 Silver</span>
       <span class="remark-item">🥉 Bronze</span>
-      <span class="remark-item"> // ⭐ Team Rookie</span>
     </div>
   </div>
 
@@ -253,14 +415,14 @@
   </div>
 
 <script>
-  const APPS_SCRIPT_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbw4fXGK38tBTHnfzdf2lPECD8A-6AmA3-Z5LGO5CnyOjv0tNIhfBt2Khp2TJNTLLviGSg/exec"; 
+  const APPS_SCRIPT_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbw4fXGK38tBTHnfzdf2lPECD8A-6AmA3-Z5LGO5CnyOjv0tNIhfBt2Khp2TJNTLLviGSg/exec";
 
   let rankingData = {};      
   let cachedNewData = null;  
-  
+ 
   const levelOrder = ['Elementary', 'Junior', 'Senior'];
   let currentIndex = 0;
-  
+ 
   let loopTimeline = {
     scrollTimeout: null,
     scrollInterval: null,
@@ -268,10 +430,121 @@
   };
 
   const levelColors = {
-    'Elementary': '#2e7d32', 
-    'Junior': '#d32f2f',     
+    'Elementary': '#2e7d32',
+    'Junior': '#d32f2f',    
     'Senior': '#1565c0'      
   };
+
+  // ==========================================
+  // [NEW IMPLEMENTATION] Settings & LocalStorage
+  // ==========================================
+  let appSettings = {
+    scrollSpeed: 35,          // ms per pixel step (ยิ่งน้อยยิ่งเลื่อนเร็ว)
+    delayAtBottom: 15000,     // ms ที่หยุดนิ่งรอแถวล่างสุด
+    delayAtTop: 15000,        // ms ที่หยุดรอค้างบนสุดก่อนเปลี่ยนหน้า
+    activeLevels: {
+      'Elementary': true,
+      'Junior': true,
+      'Senior': true
+    }
+  };
+
+  function loadSettings() {
+    const saved = localStorage.getItem('wro_leaderboard_config');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        appSettings = { ...appSettings, ...parsed };
+      } catch (e) {
+        console.error("โหลดไฟล์การตั้งค่าล้มเหลว กำลังใช้ค่าเริ่มต้น:", e);
+      }
+    }
+    syncSettingsUI();
+  }
+
+  function saveSettings() {
+    localStorage.setItem('wro_leaderboard_config', JSON.stringify(appSettings));
+  }
+
+  function syncSettingsUI() {
+    document.getElementById('input-speed').value = appSettings.scrollSpeed;
+    document.getElementById('val-speed').innerText = appSettings.scrollSpeed;
+
+    document.getElementById('input-delay-bottom').value = appSettings.delayAtBottom / 1000;
+    document.getElementById('val-delay-bottom').innerText = appSettings.delayAtBottom / 1000;
+
+    document.getElementById('input-delay-top').value = appSettings.delayAtTop / 1000;
+    document.getElementById('val-delay-top').innerText = appSettings.delayAtTop / 1000;
+
+    document.getElementById('toggle-elementary').checked = appSettings.activeLevels['Elementary'];
+    document.getElementById('toggle-junior').checked = appSettings.activeLevels['Junior'];
+    document.getElementById('toggle-senior').checked = appSettings.activeLevels['Senior'];
+  }
+
+  function openSettingsModal() {
+    const overlay = document.getElementById('settings-overlay');
+    overlay.style.display = 'flex';
+    requestAnimationFrame(() => overlay.classList.add('show'));
+  }
+
+  function closeSettingsModal() {
+    const overlay = document.getElementById('settings-overlay');
+    overlay.classList.remove('show');
+    setTimeout(() => overlay.style.display = 'none', 300);
+  }
+
+  function closeSettingsModalOutside(e) {
+    if (e.target.id === 'settings-overlay') {
+      closeSettingsModal();
+    }
+  }
+
+  function updateScrollSpeed(val) {
+    appSettings.scrollSpeed = parseInt(val);
+    document.getElementById('val-speed').innerText = val;
+    saveSettings();
+
+    // ปรับความเร็วล้อไปกับการสกรอลล์ทันทีถ้ากำลังทำงานอยู่
+    const container = document.getElementById('table-container');
+    if (loopTimeline.scrollInterval && container.scrollTop > 0) {
+      clearInterval(loopTimeline.scrollInterval);
+      executeScrollUp();
+    }
+  }
+
+  function updateDelay(position, val) {
+    const msValue = parseInt(val) * 1000;
+    if (position === 'bottom') {
+      appSettings.delayAtBottom = msValue;
+      document.getElementById('val-delay-bottom').innerText = val;
+    } else if (position === 'top') {
+      appSettings.delayAtTop = msValue;
+      document.getElementById('val-delay-top').innerText = val;
+    }
+    saveSettings();
+  }
+
+  function updateLevelToggle(level, isChecked) {
+    appSettings.activeLevels[level] = isChecked;
+    saveSettings();
+  }
+
+  // ค้นหาระดับชั้นถัดไปที่ถูกเปิดใช้งานไว้
+  function getNextActiveIndex(startIndex) {
+    let checkIndex = startIndex;
+    for (let i = 0; i < levelOrder.length; i++) {
+      checkIndex = (checkIndex + 1) % levelOrder.length;
+      const levelName = levelOrder[checkIndex];
+      if (appSettings.activeLevels[levelName]) {
+        return checkIndex;
+      }
+    }
+    return -1; // ถ้าไม่มีหน้าไหนถูกเปิดอยู่เลย
+  }
+
+  // ==========================================
+  // Core Business Logics (ปรับปรุงให้ใช้ Settings)
+  // ==========================================
 
   function clearAllActiveTimers() {
     if (loopTimeline.scrollTimeout) clearTimeout(loopTimeline.scrollTimeout);
@@ -283,14 +556,14 @@
     if (typeof google !== 'undefined' && google.script && google.script.run) {
       google.script.run.withSuccessHandler(function(data) {
         rankingData = data;
-        showTable(levelOrder[currentIndex]);
+        startRotation();
       }).getRankingData();
     } else {
       fetch(`${APPS_SCRIPT_WEBAPP_URL}?api=true`)
         .then(response => response.json())
         .then(data => {
           rankingData = data;
-          showTable(levelOrder[currentIndex]);
+          startRotation();
         })
         .catch(err => {
           document.getElementById('table-container').innerHTML = `<p class="text-center text-danger pt-5">Error API Connection: ${err.message}</p>`;
@@ -298,16 +571,37 @@
     }
   }
 
+  function startRotation() {
+    // หาหน้าแรกที่ควรจัดแสดง
+    let firstActiveIndex = -1;
+    for (let i = 0; i < levelOrder.length; i++) {
+      if (appSettings.activeLevels[levelOrder[i]]) {
+        firstActiveIndex = i;
+        break;
+      }
+    }
+
+    if (firstActiveIndex !== -1) {
+      currentIndex = firstActiveIndex;
+      showTable(levelOrder[currentIndex]);
+    } else {
+      // ถ้าปิดหมดทุกระดับชั้น ให้ค้างไว้และลองเช็คใหม่ใน 3 วินาที
+      document.getElementById('table-container').innerHTML = '<p class="text-center text-muted pt-5">กรุณาเปิดหน้าจอระดับชั้นอย่างน้อย 1 ระดับในเมนูตั้งค่า (ฟันเฟือง)</p>';
+      document.getElementById('current-level').innerText = "PAUSED";
+      loopTimeline.pageSwitchTimeout = setTimeout(startRotation, 3000);
+    }
+  }
+
   function fetchUpdatesInBackground() {
     if (typeof google !== 'undefined' && google.script && google.script.run) {
       google.script.run.withSuccessHandler(function(data) {
-        cachedNewData = data; 
+        cachedNewData = data;
       }).getRankingData();
     } else {
       fetch(`${APPS_SCRIPT_WEBAPP_URL}?api=true`)
         .then(response => response.json())
         .then(data => {
-          cachedNewData = data; 
+          cachedNewData = data;
         })
         .catch(err => console.log("Background fetch update paused: ", err));
     }
@@ -358,7 +652,7 @@
       <tbody>`;
 
     rows.forEach((row, index) => {
-      let rankFromSheet = row[0]; 
+      let rankFromSheet = row[0];
       let teamId = row[1];
       let teamName = row[2];
       let score1 = row[3];
@@ -372,7 +666,7 @@
       if (totalScore !== "" && totalScore !== undefined && totalScore !== null) {
         if (score1 == totalScore) {
           score1Class = "best-score-highlight";
-        } 
+        }
         else if (score2 == totalScore) {
           score2Class = "best-score-highlight";
         }
@@ -383,7 +677,7 @@
         if (index >= 0 && index <= 2) {
           rowTierClass = "tier-finalist-top3";  
         } else if (index >= 3 && index <= 9) {
-          rowTierClass = "tier-finalist-top10"; 
+          rowTierClass = "tier-finalist-top10";
         }
       }
 
@@ -405,14 +699,14 @@
     
     // 🛡️ [แก้บั๊กโหลดช้า v2.2.9] รอให้เบราว์เซอร์เตรียมโครงสร้างข้อมูลตารางเสร็จสมบูรณ์ก่อน ค่อยเลื่อนไปล่างสุด
     requestAnimationFrame(() => {
-      container.scrollTop = container.scrollHeight; 
+      container.scrollTop = container.scrollHeight;
       
       setTimeout(() => {
         if(targetTable) {
           targetTable.classList.add('visible');
         }
-        // เมื่อวาร์ปมาอยู่ด้านล่างสุดเรียบร้อยแล้ว ให้จอดนิ่งค้างไว้ก่อน 15 วินาที แล้วค่อย ๆ เริ่มสกรอลล์ขึ้นไปด้านบน
-        loopTimeline.scrollTimeout = setTimeout(executeScrollUp, 10000);
+        // [ปรับปรุง] เปลี่ยนค่าดีเลย์ค้างล่างให้ล้อตามการตั้งค่า delayAtBottom
+        loopTimeline.scrollTimeout = setTimeout(executeScrollUp, appSettings.delayAtBottom);
       }, 100);
     });
   }
@@ -421,17 +715,20 @@
   function executeScrollUp() {
     const container = document.getElementById('table-container');
     const stepPixels = 1;
-    const speedMs = 35; // ความเร็วของการเลื่อนตารางขึ้นด้านบน
+
+    // เคลียร์ Interval เพื่อความชัวร์ไม่ทับซ้อน
+    if (loopTimeline.scrollInterval) clearInterval(loopTimeline.scrollInterval);
 
     loopTimeline.scrollInterval = setInterval(() => {
       if (container.scrollTop > 0) {
         container.scrollTop -= stepPixels;
       } else {
         clearInterval(loopTimeline.scrollInterval);
-        // เมื่อวิ่งขึ้นมาถึงด้านบนสุด (โชว์อันดับ 1-10 และเหรียญรางวัล) ค้างหน้าจอไว้ 15 วินาทีให้ทุกคนได้ชื่นชม แล้วค่อยเปลี่ยนหน้า
-        loopTimeline.pageSwitchTimeout = setTimeout(moveToNextPage, 10000);
+        loopTimeline.scrollInterval = null;
+        // เมื่อวิ่งขึ้นมาถึงด้านบนสุด (โชว์อันดับ 1-10) ค้างจอไว้ตามการตั้งค่า delayAtTop แล้วสลับหน้า
+        loopTimeline.pageSwitchTimeout = setTimeout(moveToNextPage, appSettings.delayAtTop);
       }
-    }, speedMs);
+    }, appSettings.scrollSpeed); // [ปรับปรุง] ดึงความเร็วเลื่อนจากความเร็วที่ผู้ใช้งานปรับ
   }
 
   function moveToNextPage() {
@@ -439,14 +736,25 @@
     
     if (cachedNewData !== null) {
       rankingData = cachedNewData;
-      cachedNewData = null; 
+      cachedNewData = null;
       console.log("Background Cache Sync Completed.");
     }
 
-    currentIndex = (currentIndex + 1) % levelOrder.length;
-    showTable(levelOrder[currentIndex]);
+    // [ปรับปรุง] เช็คการเปิด-ปิดระดับชั้น และเคลื่อนที่ไปหน้าระดับชั้นที่เปิดอยู่
+    const nextIndex = getNextActiveIndex(currentIndex);
+    if (nextIndex !== -1) {
+      currentIndex = nextIndex;
+      showTable(levelOrder[currentIndex]);
+    } else {
+      // ถ้าไม่มีการเปิดหน้าจอระดับชั้นใด ๆ เลยให้แสดงแจ้งเตือน และวนกลับมาเช็คใหม่เรื่อย ๆ
+      document.getElementById('table-container').innerHTML = '<p class="text-center text-muted pt-5">กรุณาเปิดหน้าจอระดับชั้นอย่างน้อย 1 ระดับในเมนูตั้งค่า (ฟันเฟือง)</p>';
+      document.getElementById('current-level').innerText = "PAUSED";
+      loopTimeline.pageSwitchTimeout = setTimeout(moveToNextPage, 3000);
+    }
   }
 
+  // เรียกทำงานครั้งแรก
+  loadSettings();
   fetchInitialData();
   setInterval(fetchUpdatesInBackground, 90000);
 </script>
